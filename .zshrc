@@ -57,8 +57,8 @@ bindkey "^b" backward-word # Ctrl+b で左に１単語移動
 ##========================================================##
 # ls, #dir, vdir の設定
 alias s='screen -U'
-alias ll='ls -al'
-alias ls='ls -G'
+alias ll='ls -l'
+alias ls='ls --color'
 alias grep='grep --color=auto'
 export MAILCHECK=0
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
@@ -196,7 +196,7 @@ setopt rm_star_wait          # rm * を実行する前に確認
 #setopt no_clobber            # リダイレクトで上書きを禁止
 unsetopt no_clobber
 
-setopt no_unset              # 未定義変数の使用禁止
+#setopt no_unset              # 未定義変数の使用禁止
 
 #setopt interactive_comments  # コマンド入力中のコメントを認める
 #setopt chase_links           # シンボリックリンクはリンク先のパスに変換してから実行
