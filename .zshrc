@@ -261,6 +261,7 @@ alias e='emacs'
 alias h='history'
 alias ha='history-all'
 alias screen='TERM=xterm screen'
+alias vi='vim'
 # HTMLファイルに張り付け用の、タブ、空白、< > の変換コマンド
 alias htmlconv='sed -e "s/</\&lt;/g;s/>/\&gt;/g;s/\t/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g;s/\s/\&nbsp;/g" '
 
