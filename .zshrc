@@ -83,6 +83,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31
 ##========================================================##
 ##====================== 補完の設定 ======================##
 ##========================================================##
+fpath=(/usr/local/share/zsh-completions $fpath)
 autoload -U compinit ; compinit
 # 補完候補の大文字小文字の違いを無視
 #zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -273,4 +274,22 @@ export LANG=en_US.UTF-8
 preexec () {
         echo -ne "\ek${1%% *}\e\\"
 }
+
+# PhalconDevToolsのパス指定
+export PATH=$PATH:/Users/Atsushi/dev/git/phalcon-devtools
+
+fpath=(/usr/local/share/zsh/functions $fpath)
+
+# diffをカラフルに
+alias diff='colordiff'
+alias less='less -R'
+
+# alias Cでクリップボードコピー
+if which pbcopy > /dev/null 2>&1 ; then
+   #Mac
+   alias -g C='| pbcopy'
+elif which xsel > /dev/null 2>&1 ; then
+   #Linux
+   alias -g C='| xsel --input --clipboard'
+fi
 
