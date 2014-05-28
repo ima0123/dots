@@ -8,7 +8,7 @@ tap sanemat/font
 
 install rbenv
 install ruby-build
-install zsh
+install zsh --disable-etcdir
 install git
 install openssl
 install ricty
@@ -21,6 +21,18 @@ install ag
 install tig
 install pcre
 install putty
+install tmux
+install tree
+install colordiff
+install watch
+install htop
+install pstree
+install vim
+
+tap homebrew/dupes
+install groff
+
+
 
 install brew-cask
 
