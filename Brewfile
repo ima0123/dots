@@ -32,8 +32,6 @@ install vim
 tap homebrew/dupes
 install groff
 
-
-
 install brew-cask
 
 cask install iterm2
@@ -79,9 +77,13 @@ cask install mysqlworkbench
 cask install apikitchen
 cask install node
 cask install node-webkit
+cask install android-studio
+cask install android-file-transfer
 
 
 # Android 
+install gradle
+install android
 cask install genymotion
 
 # other
