@@ -59,13 +59,15 @@ cask install sourcetree
 cask install skype
 cask install marsedit
 cask install sublime-text
-cask install transmit
 cask install yorufukurou
 cask install clipmenu
 cask install mou
 cask install monolingual
 cask install transmit
 cask install owncloud
+
+# From AppStore
+#cask install transmit
 
 
 # for development
