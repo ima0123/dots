@@ -84,7 +84,8 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31
 ##====================== 補完の設定 ======================##
 ##========================================================##
 fpath=(/usr/local/share/zsh-completions $fpath)
-autoload -U compinit ; compinit
+autoload -U compinit ;
+compinit -u
 # 補完候補の大文字小文字の違いを無視
 #zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:default' menu select=1 # 補完候補を←↓↑→で選択
@@ -275,10 +276,7 @@ preexec () {
         echo -ne "\ek${1%% *}\e\\"
 }
 
-# PhalconDevToolsのパス指定
-export PATH=$PATH:/Users/Atsushi/dev/git/phalcon-devtools
-
-fpath=(/usr/local/share/zsh/functions $fpath)
+#fpath=(/usr/local/share/zsh/functions $fpath)
 
 # diffをカラフルに
 alias diff='colordiff'
