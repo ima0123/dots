@@ -2,11 +2,11 @@
 scriptencoding utf-8
 
 if has('vim_starting')
-  set runtimepath+=~/dotfiles/.vim/bundle/neobundle.vim/
-  call neobundle#rc(expand('~/dotfiles/.vim/bundle/'))
+  set runtimepath+=~/.dots/.vim/bundle/neobundle.vim/
+  call neobundle#rc(expand('~/.dots/.vim/bundle/'))
 endif
 
-call neobundle#begin(expand('~/dotfiles/.vim/bundle/'))
+call neobundle#begin(expand('~/.dots/.vim/bundle/'))
 
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
