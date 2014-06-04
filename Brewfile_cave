@@ -40,7 +40,7 @@ cask install vagrant
 cask install virtualbox
 #cask install alfred
 #cask install evernote
-#cask install omnifocus
+cask install omnifocus
 #cask install pckeyboardhack
 #cask install keyremap4macbook
 cask install skitch
