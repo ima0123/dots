@@ -267,15 +267,6 @@ alias vi='vim'
 # HTMLファイルに張り付け用の、タブ、空白、< > の変換コマンド
 alias htmlconv='sed -e "s/</\&lt;/g;s/>/\&gt;/g;s/\t/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g;s/\s/\&nbsp;/g" '
 
-# Acroread の Completion が遅い問題を回避
-_acroread_version='7.0.9'
-alias close='screen -D'
-cd ~
-export LANG=en_US.UTF-8
-preexec () {
-        echo -ne "\ek${1%% *}\e\\"
-}
-
 #fpath=(/usr/local/share/zsh/functions $fpath)
 
 # diffをカラフルに
