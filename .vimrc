@@ -49,3 +49,4 @@ highlight LineNr ctermbg=grey ctermfg=darkgrey
 highlight ZenkakuSpace cterm=underline ctermfg=blue
 set lcs=tab:>.
 set list
+set backspace=indent,eol,start
