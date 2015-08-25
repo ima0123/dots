@@ -80,11 +80,14 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # kill の候補にも色付き表示
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
 
+#コマンドにsudoを付けても補完
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+
 ##========================================================##
 ##====================== 補完の設定 ======================##
 ##========================================================##
-fpath=(/usr/local/share/zsh-completions $fpath)
-autoload -U compinit ;
+fpath=(/usr/local/share/zsh-completions ~/.dots/zsh/completion $fpath)
+autoload -U compinit;
 compinit -u
 # 補完候補の大文字小文字の違いを無視
 #zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -281,4 +284,18 @@ elif which xsel > /dev/null 2>&1 ; then
    #Linux
    alias -g C='| xsel --input --clipboard'
 fi
+
+# peco 
+alias -g P='| peco'
+
+alias bu="brew update;brew upgrade --all;brew cleanup;brew cask cleanup"
+alias gu="sudo gem update;sudo gem cleanup"
+
+export HOMEBREW_GITHUB_API_TOKEN="21be6c628c61cb6a22f2b08325f1485ef3576d26"
+export VAGRANT_DEFAULT_PROVIDER="parallels"
+
+if [ "$(docker-machine status default)" = 'Running' ]; then
+    eval "$(docker-machine env default)"
+fi
+
 
