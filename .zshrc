@@ -80,13 +80,10 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # kill の候補にも色付き表示
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
 
-#コマンドにsudoを付けても補完
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
-
 ##========================================================##
 ##====================== 補完の設定 ======================##
 ##========================================================##
-fpath=(/usr/local/share/zsh-completions ~/.dots/zsh/completion $fpath)
+fpath=(/usr/local/share/zsh-completions $fpath)
 autoload -U compinit;
 compinit -u
 # 補完候補の大文字小文字の違いを無視
@@ -270,6 +267,15 @@ alias vi='vim'
 # HTMLファイルに張り付け用の、タブ、空白、< > の変換コマンド
 alias htmlconv='sed -e "s/</\&lt;/g;s/>/\&gt;/g;s/\t/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g;s/\s/\&nbsp;/g" '
 
+# Acroread の Completion が遅い問題を回避
+_acroread_version='7.0.9'
+alias close='screen -D'
+cd ~
+export LANG=en_US.UTF-8
+preexec () {
+        echo -ne "\ek${1%% *}\e\\"
+}
+
 #fpath=(/usr/local/share/zsh/functions $fpath)
 
 # diffをカラフルに
@@ -285,17 +291,27 @@ elif which xsel > /dev/null 2>&1 ; then
    alias -g C='| xsel --input --clipboard'
 fi
 
-# peco 
-alias -g P='| peco'
 
-alias bu="brew update;brew upgrade --all;brew cleanup;brew cask cleanup"
-alias gu="sudo gem update;sudo gem cleanup"
+alias bu='brew update;brew upgrade --all;brew cleanup;brew cask cleanup'
 
-export HOMEBREW_GITHUB_API_TOKEN="21be6c628c61cb6a22f2b08325f1485ef3576d26"
-export VAGRANT_DEFAULT_PROVIDER="parallels"
 
-if [ "$(docker-machine status default)" = 'Running' ]; then
-    eval "$(docker-machine env default)"
+export PATH=$PATH:/usr/local/sbin
+export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+
+ . `brew --prefix`/etc/profile.d/z.sh
+
+
+if [ "$(docker-machine status dev)" = 'Running' ]; then
+  eval "$(docker-machine env dev)"
 fi
 
+alias dl='docker ps -l -q'
+
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+alias vmrun='/opt/homebrew-cask/Caskroom/vmware-fusion/8.0.2-3164312/VMware\ Fusion.app/Contents/Library/vmrun'
+alias startvm='vmrun start ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bit.vmwarevm/CentOS\ 6\ 64bit.vmx nogui'
+alias stopvm='vmrun stop ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bit.vmwarevm/CentOS\ 6\ 64bit.vmx'
+
+alias gu='sudo gem update;sudo gem cleanup'
 
