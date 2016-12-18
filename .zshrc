@@ -292,18 +292,13 @@ elif which xsel > /dev/null 2>&1 ; then
 fi
 
 
-alias bu='brew update;brew upgrade --all;brew cleanup;brew cask cleanup'
+alias bu='brew update;brew upgrade'
 
 
 export PATH=$PATH:/usr/local/sbin
-export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
 
  . `brew --prefix`/etc/profile.d/z.sh
-
-
-if [ "$(docker-machine status dev)" = 'Running' ]; then
-  eval "$(docker-machine env dev)"
-fi
 
 alias dl='docker ps -l -q'
 
