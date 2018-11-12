@@ -74,7 +74,9 @@ esac
 
 alias grep='grep --color=auto'
 export MAILCHECK=0
-export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+#export LS_COLORS='di=31:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+export LSCOLORS=gxfxcxdxbxegedabagacad
+
 # 補完候補にも色付き表示
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # kill の候補にも色付き表示
@@ -296,8 +298,6 @@ alias bu='brew update;brew upgrade'
 
 
 export PATH=$PATH:/usr/local/sbin
-export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
-
  . `brew --prefix`/etc/profile.d/z.sh
 
 alias dl='docker ps -l -q'
@@ -310,3 +310,29 @@ alias stopvm='vmrun stop ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bi
 
 alias gu='sudo gem update;sudo gem cleanup'
 
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+export PATH="/Users/atsushi/anaconda3/bin:$PATH"
+
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+
+# pyenv
+PYENV_ROOT="$HOME/.pyenv"
+PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+
+# nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/atsushi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/atsushi/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/atsushi/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/atsushi/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+export PATH="$HOME/.composer/vendor/bin:$PATH"
