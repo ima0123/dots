@@ -294,7 +294,7 @@ elif which xsel > /dev/null 2>&1 ; then
 fi
 
 
-alias bu='brew update;brew upgrade'
+alias bu='brew update;brew upgrade;brew cleanup'
 
 
 export PATH=$PATH:/usr/local/sbin
@@ -303,26 +303,6 @@ export PATH=$PATH:/usr/local/sbin
 alias dl='docker ps -l -q'
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-alias vmrun='/opt/homebrew-cask/Caskroom/vmware-fusion/8.0.2-3164312/VMware\ Fusion.app/Contents/Library/vmrun'
-alias startvm='vmrun start ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bit.vmwarevm/CentOS\ 6\ 64bit.vmx nogui'
-alias stopvm='vmrun stop ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bit.vmwarevm/CentOS\ 6\ 64bit.vmx'
-
-alias gu='sudo gem update;sudo gem cleanup'
-
-
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
-export PATH="/Users/atsushi/anaconda3/bin:$PATH"
-
-if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
-
-# pyenv
-PYENV_ROOT="$HOME/.pyenv"
-PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 
