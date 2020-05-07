@@ -304,10 +304,16 @@ export PATH=$PATH:/usr/local/sbin
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 hevc-convert () {
-  filename=$(basename $1)
+
+  filename="basename $@"
   extension=${filename##*.}
   filenameWithoutExt=${filename%.*}
   transferedFilename="$filenameWithoutExt-hevc.$extension"
+
+  echo "filename is $filename"
+  echo "extension is $extension"
+  echo "transfered filename is $transferedFilename"
+  return 
   codec=`ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $1`
 
   if [ $codec = 'h264' ]; then
