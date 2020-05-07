@@ -34,7 +34,7 @@
 # %c, %., %C = $PWD の後ろ側の構成要素
 
 # .zshrc をコンパイルして .zshrc.zwc を生成するコマンド
-zcompile .zshrc
+zcompile ~/.zshrc
 
 # コマンドラインスタック（入力中コマンドをスタックに退避させる）
 # ESC-q
@@ -300,39 +300,25 @@ alias bu='brew update;brew upgrade'
 export PATH=$PATH:/usr/local/sbin
  . `brew --prefix`/etc/profile.d/z.sh
 
-alias dl='docker ps -l -q'
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-alias vmrun='/opt/homebrew-cask/Caskroom/vmware-fusion/8.0.2-3164312/VMware\ Fusion.app/Contents/Library/vmrun'
-alias startvm='vmrun start ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bit.vmwarevm/CentOS\ 6\ 64bit.vmx nogui'
-alias stopvm='vmrun stop ~/Documents/Virtual\ Machines.localized/CentOS\ 6\ 64bit.vmwarevm/CentOS\ 6\ 64bit.vmx'
+hevc-convert () {
+  filename=$(basename $1)
+  extension=${filename##*.}
+  filenameWithoutExt=${filename%.*}
+  transferedFilename="$filenameWithoutExt-hevc.$extension"
+  codec=`ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $1`
 
-alias gu='sudo gem update;sudo gem cleanup'
+  if [ $codec = 'h264' ]; then
+      ffmpeg -i "$1" -c:v libx265 -preset fast -crf 28 -tag:v hvc1 -c:a eac3 -b:a 224k "$transferedFilename"
+  fi
+}
 
+download-video () {
+  youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 -o "$HOME/Downloads/%(title)s.%(ext)s" $1
+  wait $!
+  filename=`youtube-dl --get-filename -o '%(title)s.%(ext)s' $1`
+  open "$HOME/Downloads/$filename"
+}
 
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
-export PATH="/Users/atsushi/anaconda3/bin:$PATH"
-
-if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
-
-# pyenv
-PYENV_ROOT="$HOME/.pyenv"
-PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
-alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
-
-# nodebrew
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/atsushi/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/atsushi/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/atsushi/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/atsushi/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-export PATH="$HOME/.composer/vendor/bin:$PATH"
