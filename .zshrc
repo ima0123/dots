@@ -86,8 +86,10 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31
 ##====================== 補完の設定 ======================##
 ##========================================================##
 fpath=(/usr/local/share/zsh-completions $fpath)
-autoload -U compinit;
-compinit -u
+
+autoload -Uz compinit
+compinit
+
 # 補完候補の大文字小文字の違いを無視
 #zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:default' menu select=1 # 補完候補を←↓↑→で選択
@@ -297,9 +299,7 @@ fi
 alias bu='brew update;brew upgrade;brew cleanup'
 
 
-export PATH=$PATH:/usr/local/sbin
- . `brew --prefix`/etc/profile.d/z.sh
-
+export PATH=/usr/local/sbin:$PATH
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -324,3 +324,8 @@ download-video () {
   open "$HOME/Downloads/$filename"
 }
 
+alias obs='open /Applications/OBS.app/Contents/MacOS/OBS --args -picture'
+
+
+
+export PATH="/usr/local/opt/php@7.3/bin:$PATH"
