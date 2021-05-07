@@ -296,7 +296,7 @@ elif which xsel > /dev/null 2>&1 ; then
 fi
 
 
-alias bu='brew update;brew upgrade;brew cleanup'
+alias bu='brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup'
 
 
 export PATH=/usr/local/sbin:$PATH
