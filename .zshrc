@@ -169,10 +169,7 @@ setopt auto_pushd            # 普通に cd するときにもディレクトリ
 setopt pushd_ignore_dups     # ディレクトリスタックに重複する物は古い方を削除
 setopt pushd_to_home         # pushd 引数ナシ == pushd $HOME
 setopt pushd_silent          # pushd,popdの度にディレクトリスタックの中身を表示しない
-# pop command
-alias pd='popd'
-alias gd='dirs -v; echo -n "select number: ";
-read newdir; cd +"$newdir" '
+
 
 ##========================================================##
 ##====================== 雑多な設定 ======================##
@@ -251,26 +248,6 @@ esac
 }
 
 
-# Global alias
-alias -g L='| less'
-alias -g H='| head'
-alias -g T='| tail'
-alias -g G='| grep'
-alias -g S='| sed'
-alias -g A='| awk'
-alias -g W='| wc'
-
-alias ssh='ssh -o ServerAliveInterval=60'
-
-# alias
-alias e='emacs'
-alias h='history'
-alias ha='history-all'
-alias screen='TERM=xterm screen'
-alias vi='vim'
-# HTMLファイルに張り付け用の、タブ、空白、< > の変換コマンド
-alias htmlconv='sed -e "s/</\&lt;/g;s/>/\&gt;/g;s/\t/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g;s/\s/\&nbsp;/g" '
-
 # Acroread の Completion が遅い問題を回避
 _acroread_version='7.0.9'
 alias close='screen -D'
@@ -281,27 +258,6 @@ preexec () {
 }
 
 #fpath=(/usr/local/share/zsh/functions $fpath)
-
-# diffをカラフルに
-alias diff='colordiff'
-alias less='less -R'
-
-# alias Cでクリップボードコピー
-if which pbcopy > /dev/null 2>&1 ; then
-   #Mac
-   alias -g C='| pbcopy'
-elif which xsel > /dev/null 2>&1 ; then
-   #Linux
-   alias -g C='| xsel --input --clipboard'
-fi
-
-
-alias bu='brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup'
-
-
-export PATH=/usr/local/sbin:$PATH
-
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 hevc-convert () {
 
@@ -324,60 +280,15 @@ download-video () {
   open "$HOME/Downloads/$filename"
 }
 
-alias obs='open /Applications/OBS.app/Contents/MacOS/OBS --args -picture'
-
-
-export PATH="/opt/homebrew/opt/php@8.0/bin:$PATH"
-export PATH="/opt/homebrew/opt/php@8.0/sbin:$PATH"
-
-#export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
-#export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
-
-
-alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
-
-export PATH="/opt/homebrew/opt/mariadb@10.2/bin:$PATH"
-
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
-export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-
-
-
-## Salesforce CLI
-SF_DISABLE_TELEMETRY=true
-#eval $(sf autocomplete script zsh)
-
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
-
-# Created by `pipx` on 2024-01-17 17:38:26
-export PATH="$PATH:/Users/atsushi/.local/bin"
-
-# asdf for ruby env
-. "$HOME/.asdf/asdf.sh"
-. "$HOME/.asdf/completions/asdf.bash"
-
-export PATH="$PATH:$HOME/.gem/ruby/2.6.0/bin"
-
-
-#alias ssh='/opt/homebrew/bin/mosh'
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
 # rbenv
 eval "$(rbenv init - zsh)"
-
-# ImageMagic for running bundle install in try-terior project
-export PATH="/opt/homebrew/opt/imagemagick@6/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/imagemagick@6/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/imagemagick@6/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/imagemagick@6/lib/pkgconfig"
 
 # starship
 eval "$(starship init zsh)"
 
-
-
+[[ -f ~/.dots/.zsh/aliases.zsh ]] && source ~/.dots/.zsh/aliases.zsh
