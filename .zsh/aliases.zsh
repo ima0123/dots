@@ -16,7 +16,7 @@ alias la="eza -al --group-directories-first --icons=auto"
 # diffをカラフルに
 alias diff='colordiff'
 alias less='less -R'
-
+alias grep='grep --color=auto'
 
 ## Apps
 
@@ -54,6 +54,7 @@ alias h='history'
 alias ha='history-all'
 alias screen='TERM=xterm screen'
 alias vi='vim'
+alias s='screen -U'
 
 
 # pop command

@@ -34,7 +34,7 @@
 # %c, %., %C = $PWD の後ろ側の構成要素
 
 # .zshrc をコンパイルして .zshrc.zwc を生成するコマンド
-zcompile ~/.zshrc
+# zcompile ~/.zshrc
 
 # コマンドラインスタック（入力中コマンドをスタックに退避させる）
 # ESC-q
@@ -52,30 +52,6 @@ bindkey "^f" forward-word # Ctrl+f で右に１単語移動
 bindkey "^[[5D" backward-word # Ctrl+左矢印キー（←）で左に１単語移動
 bindkey "^b" backward-word # Ctrl+b で左に１単語移動
 
-##========================================================##
-##================= リストの色つけの設定 =================##
-##========================================================##
-# ls, #dir, vdir の設定
-alias s='screen -U'
-
-
-case "${OSTYPE}" in
-darwin*)
-  alias ls="ls -G"
-  alias ll="ls -lG"
-  alias la="ls -laG"
-  ;;
-linux*)
-  alias ls='ls --color'
-  alias ll='ls -l --color'
-  alias la='ls -al --color'
-  ;;
-esac
-
-alias grep='grep --color=auto'
-export MAILCHECK=0
-#export LS_COLORS='di=31:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-export LSCOLORS=gxfxcxdxbxegedabagacad
 
 # 補完候補にも色付き表示
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
@@ -150,17 +126,17 @@ function history-all { history -E 1 }
 ##========================================================##
 ##=================== プロンプトの設定 ===================##
 ##========================================================##
-autoload -U promptinit ; promptinit
-autoload -U colors     ; colors
+# autoload -U promptinit ; promptinit
+# autoload -U colors     ; colors
 # プロンプトテーマを表示するコマンド
-# prompt -l
-# 基本のプロンプト
-PROMPT="%{$reset_color%}$ "
-# [場所] プロンプト
-PROMPT="%{$reset_color%}[%{$fg[red]%}%B%~%b%{$reset_color%}]$PROMPT"
-# 名前@マシン名 プロンプト
-PROMPT="%{$reset_color%}%{$fg[green]%}$USER%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}$PROMPT"
-RPROMPT="%{$fg[green]%}[%*]%{$reset_color%}"
+# # prompt -l
+# # 基本のプロンプト
+# PROMPT="%{$reset_color%}$ "
+# # [場所] プロンプト
+# PROMPT="%{$reset_color%}[%{$fg[red]%}%B%~%b%{$reset_color%}]$PROMPT"
+# # 名前@マシン名 プロンプト
+# PROMPT="%{$reset_color%}%{$fg[green]%}$USER%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}$PROMPT"
+# RPROMPT="%{$fg[green]%}[%*]%{$reset_color%}"
 ##========================================================##
 ##================ ディレクトリ移動の設定 ================##
 ##========================================================##
@@ -257,32 +233,12 @@ preexec () {
         echo -ne "\ek${1%% *}\e\\"
 }
 
-#fpath=(/usr/local/share/zsh/functions $fpath)
-
-hevc-convert () {
-
-  filename="basename $@"
-  extension=${filename##*.}
-  filenameWithoutExt=${filename%.*}
-  transferedFilename="$filenameWithoutExt-hevc.$extension"
-
-  codec=`ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $1`
-
-  if [ $codec = 'h264' ]; then
-      ffmpeg -i "$1" -c:v libx265 -preset fast -crf 28 -tag:v hvc1 -c:a eac3 -b:a 224k "$transferedFilename"
-  fi
-}
-
-download-video () {
-  youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 -o "$HOME/Downloads/%(title)s.%(ext)s" $1
-  wait $!
-  filename=`youtube-dl --get-filename -o '%(title)s.%(ext)s' $1`
-  open "$HOME/Downloads/$filename"
-}
+[[ -f ~/.dots/.zsh/aliases.zsh ]] && source ~/.dots/.zsh/aliases.zsh
+[[ -f ~/.dots/.zsh/functions.zsh ]] && source ~/.dots/.zsh/functions.zsh
+[[ -f ~/.dots/.zsh/starship.zsh ]] && source ~/.dots/.zsh/starship.zsh
 
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
 # rbenv
@@ -291,4 +247,4 @@ eval "$(rbenv init - zsh)"
 # starship
 eval "$(starship init zsh)"
 
-[[ -f ~/.dots/.zsh/aliases.zsh ]] && source ~/.dots/.zsh/aliases.zsh
+
