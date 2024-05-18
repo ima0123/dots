@@ -224,7 +224,7 @@ unsetopt no_clobber
 #setopt xtrace                # コマンドラインがどのように展開され実行されたかを表示する
 
 # less の動作（man less 参照）
-LESS=-M
+LESS=eFRX
 export LESS
 if type /usr/bin/lesspipe &>/dev/null
 then
@@ -301,7 +301,7 @@ alias bu='brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup'
 
 export PATH=/usr/local/sbin:$PATH
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 hevc-convert () {
 
@@ -327,5 +327,57 @@ download-video () {
 alias obs='open /Applications/OBS.app/Contents/MacOS/OBS --args -picture'
 
 
+export PATH="/opt/homebrew/opt/php@8.0/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@8.0/sbin:$PATH"
 
-export PATH="/usr/local/opt/php@7.3/bin:$PATH"
+#export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+#export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
+
+
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+
+export PATH="/opt/homebrew/opt/mariadb@10.2/bin:$PATH"
+
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+
+
+
+## Salesforce CLI
+SF_DISABLE_TELEMETRY=true
+#eval $(sf autocomplete script zsh)
+
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+
+# Created by `pipx` on 2024-01-17 17:38:26
+export PATH="$PATH:/Users/atsushi/.local/bin"
+
+# asdf for ruby env
+. "$HOME/.asdf/asdf.sh"
+. "$HOME/.asdf/completions/asdf.bash"
+
+export PATH="$PATH:$HOME/.gem/ruby/2.6.0/bin"
+
+
+#alias ssh='/opt/homebrew/bin/mosh'
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+# rbenv
+eval "$(rbenv init - zsh)"
+
+# ImageMagic for running bundle install in try-terior project
+export PATH="/opt/homebrew/opt/imagemagick@6/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/imagemagick@6/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/imagemagick@6/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/imagemagick@6/lib/pkgconfig"
+
+# starship
+eval "$(starship init zsh)"
+
+
+
