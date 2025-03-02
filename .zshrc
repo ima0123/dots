@@ -42,209 +42,184 @@
 # コマンド入力中にヘルプ（man）を見る
 # ESC-h
 
+# エディタとページャーのデフォルト設定
+export EDITOR='vim'            # デフォルトのエディタをvimに設定
+export VISUAL='vim'            # ビジュアルエディタもvimに設定
+export PAGER='less'           # ページャーをlessに設定
+
+# 基本的な環境変数の設定
+export LANG=en_US.UTF-8        # システム全体の言語設定
+export EDITOR='vim'            # デフォルトのエディタをvimに設定
+export VISUAL='vim'            # ビジュアルエディタもvimに設定
+export PAGER='less'           # ページャーをlessに設定
+
+# パスの重複を防ぐ
+# path と PATH の重複を防ぎ、パスの一意性を保証
+typeset -U path PATH
+
 ##========================================================##
 ##================== キーバインドの設定 ==================##
 ##========================================================##
-#bindkey -e      # emacs キーバインド
-#bindkey -v      # vi キーバインド
-bindkey "^[[5C" forward-word # Ctrl+右矢印キー（→）で右に１単語移動
-bindkey "^f" forward-word # Ctrl+f で右に１単語移動
-bindkey "^[[5D" backward-word # Ctrl+左矢印キー（←）で左に１単語移動
-bindkey "^b" backward-word # Ctrl+b で左に１単語移動
-
-
-# 補完候補にも色付き表示
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-# kill の候補にも色付き表示
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'
+# カーソル移動を効率化するキーバインド設定
+bindkey "^[[5C" forward-word   # Ctrl+右矢印キー：次の単語へ移動
+bindkey "^f" forward-word      # Ctrl+f：次の単語へ移動
+bindkey "^[[5D" backward-word  # Ctrl+左矢印キー：前の単語へ移動
+bindkey "^b" backward-word     # Ctrl+b：前の単語へ移動
 
 ##========================================================##
 ##====================== 補完の設定 ======================##
 ##========================================================##
-fpath=(/usr/local/share/zsh-completions $fpath)
-
+# 補完システムの初期化（キャッシュを活用して高速化）
 autoload -Uz compinit
-compinit
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+    compinit                   # 補完データベースの再生成
+else
+    compinit -C               # キャッシュを使用して高速化
+fi
 
-# 補完候補の大文字小文字の違いを無視
-#zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-zstyle ':completion:*:default' menu select=1 # 補完候補を←↓↑→で選択
-zstyle ':completion:*' use-cache true        # 補完キャッシュ
-# kill で 'ps x' のリストから選択可能
-zstyle ':completion:*:processes' command 'ps x'
+# 補完機能の拡張
+fpath=(/usr/local/share/zsh-completions $fpath)   # 追加の補完定義を読み込む
 
-setopt list_packed           # コンパクトに補完リストを表示
-#setopt auto_remove_slash     # 補完で末尾に補われた / を自動的に削除
-unsetopt auto_remove_slash
-setopt auto_param_slash      # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
-setopt mark_dirs             # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
-setopt list_types            # 補完候補一覧でファイルの種別を識別マーク表示 (訳注:ls -F の記号)
-unsetopt menu_complete       # 補完の際に、可能なリストを表示してビープを鳴らすのではなく、
-                        # 最初にマッチしたものをいきなり挿入、はしない
-setopt auto_list             # ^Iで補完可能な一覧を表示する(補完候補が複数ある時に、一覧表示)
-setopt auto_menu             # 補完キー連打で順に補完候補を自動で補完
-setopt auto_param_keys       # カッコの対応などを自動的に補完
-setopt auto_resume           # サスペンド中のプロセスと同じコマンド名を実行した場合はリジューム
+# 補完の詳細設定
+zstyle ':completion:*' accept-exact '*(N)'        # 正確なマッチを優先
+zstyle ':completion:*' use-cache on               # キャッシュを有効化
+zstyle ':completion:*' cache-path ~/.zsh/cache    # キャッシュの保存先
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 大文字小文字を区別しない
+zstyle ':completion:*:default' menu select=1      # 補完候補をカーソルで選択可能に
+zstyle ':completion:*' use-cache true            # キャッシュを有効化
+zstyle ':completion:*:processes' command 'ps x'   # プロセスの補完を強化
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}  # 補完候補に色付け
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([%0-9]#)*=0=01;31'  # killコマンドの補完候補に色付け
 
-#setopt auto_correct          # 補完時にスペルチェック
-#setopt correct               # スペルミスを補完
-#setopt correct_all           # コマンドライン全てのスペルチェックをする
+# 補完の動作設定
+setopt list_packed           # 補完候補を詰めて表示
+unsetopt auto_remove_slash   # ディレクトリ名の末尾の / を自動的に削除しない
+setopt auto_param_slash      # ディレクトリ名の補完で末尾に / を付加
+setopt mark_dirs            # ディレクトリ名が補完対象の場合 / を付加
+setopt list_types           # 補完候補のファイル種別を表示
+unsetopt menu_complete      # 最初のタブで補完候補を即時挿入しない
+setopt auto_list           # 補完候補を一覧表示
+setopt auto_menu           # 補完キー連打で候補を順に表示
+setopt auto_param_keys     # カッコの対応などを自動的に補完
+setopt auto_resume         # サスペンド中のコマンドと同じものを実行で再開
+unsetopt list_beep        # 補完時にビープ音を鳴らさない
 
 ##========================================================##
 ##==================== 予測補完の設定 ====================##
 ##========================================================##
-autoload -U predict-on       # 履歴による予測入力 (man zshcontrib)
+# コマンドの予測入力機能
+autoload -U predict-on      # 予測入力機能を有効化
 zle -N predict-on
 zle -N predict-off
-bindkey '^xp'  predict-on    # Cttl+x p で予測オン
-bindkey '^x^p' predict-off   # Cttl+x Ctrl+p で予測オフ
+bindkey '^xp'  predict-on   # Ctrl+x p で予測入力ON
+bindkey '^x^p' predict-off  # Ctrl+x Ctrl+p で予測入力OFF
 
 ##========================================================##
 ##====================== 履歴の設定 ======================##
 ##========================================================##
-HISTFILE=$HOME/.zsh_history  # 履歴をファイルに保存する
-HISTSIZE=100000              # メモリ内の履歴の数
-SAVEHIST=100000              # 保存される履歴の数
-setopt extended_history      # 履歴ファイルに開始時刻と経過時間を記録
-#unsetopt extended_history
-setopt append_history        # 履歴を追加 (毎回 .zhistory を作るのではなく)
-setopt inc_append_history    # 履歴をインクリメンタルに追加
-setopt share_history         # 履歴の共有
-setopt hist_ignore_all_dups  # 重複するコマンド行は古い方を削除
-setopt hist_ignore_dups      # 直前と同じコマンドラインはヒストリに追加しない
-setopt hist_ignore_space     # スペースで始まるコマンド行はヒストリリストから削除
-                        # (→ 先頭にスペースを入れておけば、ヒストリに保存されない)
-unsetopt hist_verify         # ヒストリを呼び出してから実行する間に一旦編集可能を止める
-setopt hist_reduce_blanks    # 余分な空白は詰めて記録
-setopt hist_save_no_dups     # ヒストリファイルに書き出すときに、古いコマンドと同じものは無視する。
-setopt hist_no_store         # historyコマンドは履歴に登録しない
-setopt hist_expand           # 補完時にヒストリを自動的に展開
+HISTFILE=$HOME/.zsh_history  # 履歴ファイルの保存先
+HISTSIZE=1000000             # メモリ上の履歴サイズ
+SAVEHIST=1000000             # 保存される履歴のサイズ
 
-# 全履歴の一覧を出力する
+# 履歴の動作設定
+setopt extended_history      # 履歴に実行時刻を記録
+setopt append_history       # 履歴を追加モードで保存
+setopt inc_append_history   # コマンド実行時に即座に履歴を保存
+setopt share_history       # 履歴を端末間で共有
+setopt hist_ignore_all_dups # 重複するコマンドは古い方を削除
+setopt hist_ignore_dups    # 直前と同じコマンドは履歴に追加しない
+setopt hist_ignore_space   # スペースで始まるコマンドは履歴に追加しない
+unsetopt hist_verify      # 履歴展開時に実行前確認しない
+setopt hist_reduce_blanks # 余分な空白を除いて保存
+setopt hist_save_no_dups  # 重複するコマンドは古い方を削除
+setopt hist_no_store     # historyコマンドは履歴に登録しない
+setopt hist_expand      # 補完時に履歴を展開
+
+# 全履歴を表示するコマンド
 function history-all { history -E 1 }
 
 ##========================================================##
-##=================== プロンプトの設定 ===================##
-##========================================================##
-# autoload -U promptinit ; promptinit
-# autoload -U colors     ; colors
-# プロンプトテーマを表示するコマンド
-# # prompt -l
-# # 基本のプロンプト
-# PROMPT="%{$reset_color%}$ "
-# # [場所] プロンプト
-# PROMPT="%{$reset_color%}[%{$fg[red]%}%B%~%b%{$reset_color%}]$PROMPT"
-# # 名前@マシン名 プロンプト
-# PROMPT="%{$reset_color%}%{$fg[green]%}$USER%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%}$PROMPT"
-# RPROMPT="%{$fg[green]%}[%*]%{$reset_color%}"
-##========================================================##
 ##================ ディレクトリ移動の設定 ================##
 ##========================================================##
-setopt auto_cd               # ディレクトリのみで移動
-setopt auto_pushd            # 普通に cd するときにもディレクトリスタックにそのディレクトリを入れる
-setopt pushd_ignore_dups     # ディレクトリスタックに重複する物は古い方を削除
-setopt pushd_to_home         # pushd 引数ナシ == pushd $HOME
-setopt pushd_silent          # pushd,popdの度にディレクトリスタックの中身を表示しない
-
+setopt auto_cd              # ディレクトリ名のみで移動可能に
+setopt auto_pushd          # cd 時に自動的にディレクトリスタックに追加
+setopt pushd_ignore_dups   # ディレクトリスタックに重複を追加しない
+setopt pushd_to_home      # 引数なしの pushd で $HOME に移動
+setopt pushd_silent       # pushd/popd 実行時にスタックを表示しない
 
 ##========================================================##
 ##====================== 雑多な設定 ======================##
 ##========================================================##
-#setopt AUTOLOGOUT=n          # n分後に自動的にログアウト
-setopt no_beep               # コマンド入力エラーでBeepを鳴らさない
-#setopt beep
+# 基本的な動作設定
+setopt no_beep             # ビープ音を無効化
+setopt complete_in_word    # 単語の途中でも補完
+setopt extended_glob      # 拡張グロブを有効化
+setopt brace_ccl         # ブレース展開を有効化
+setopt equals           # =command を command のパス名に展開
+setopt numeric_glob_sort # 数字を数値として解釈してソート
+setopt path_dirs       # コマンドパスの解決を適切に行う
+setopt print_eight_bit # 8ビット文字を適切に表示
+setopt auto_name_dirs  # 名前付きディレクトリを有効化
 
-setopt complete_in_word
-setopt extended_glob         # 拡張グロブを有効にする
-setopt brace_ccl             # ブレース展開機能を有効にする
-setopt equals                # =COMMAND を COMMAND のパス名に展開
-setopt numeric_glob_sort     # 数字を数値と解釈してソートする
-setopt path_dirs             # コマンド名に / が含まれているとき PATH 中のサブディレクトリを探す
-setopt print_eight_bit       # 補完候補リストの日本語を適正表示
-setopt auto_name_dirs
+# フロー制御関連
+unsetopt flow_control     # Ctrl+S/Ctrl+Q によるフロー制御を無効化
+setopt no_flow_control   # フロー制御を無効化（上記と同様）
+setopt hash_cmds        # コマンドパスをキャッシュ
 
-unsetopt flow_control        # (shell editor 内で) C-s, C-q を無効にする
-setopt no_flow_control       # C-s/C-q によるフロー制御を使わない
-setopt hash_cmds             # 各コマンドが実行されるときにパスをハッシュに入れる
+# その他のオプション
+setopt bsd_echo        # BSD互換のecho
+setopt no_hup         # ログアウト時にバックグラウンドジョブを終了しない
+setopt notify        # バックグラウンドジョブの状態変化を即座に通知
+setopt long_list_jobs # ジョブリストを詳細表示
+setopt magic_equal_subst # = 以降でも補完可能に
+setopt multios      # 複数のリダイレクトやパイプを使用可能に
+setopt short_loops  # 短縮文法を許可
+setopt always_last_prompt # プロンプトを保持したまま補完
+setopt cdable_vars  # 先頭に ~ が付かない場合でもディレクトリとして補完
+setopt sh_word_split # シェルの単語分割を有効化
+setopt rm_star_wait  # rm * を実行する前に確認
 
-#setopt ignore_eof            # C-dでログアウトしない
+# セキュリティ設定
+umask 027           # ファイル作成時のデフォルトパーミッション設定
 
-setopt bsd_echo
-setopt no_hup                # ログアウト時にバックグラウンドジョブをkillしない
-#setopt no_checkjobs          # ログアウト時にバックグラウンドジョブを確認しない
-setopt notify                # バックグラウンドジョブが終了したら(プロンプトの表示を待たずに)すぐに知らせる
-setopt long_list_jobs        # 内部コマンド jobs の出力をデフォルトで jobs -L にする
+# システムリソース設定
+ulimit -s unlimited # スタックサイズ制限を解除
+limit coredumpsize 0 # コアダンプサイズを0に制限
 
-setopt magic_equal_subst     # コマンドラインの引数で --PREFIX=/USR などの = 以降でも補完できる
-#setopt mail_warning
-setopt multios               # 複数のリダイレクトやパイプなど、必要に応じて TEE や CAT の機能が使われる
-setopt short_loops           # FOR, REPEAT, SELECT, IF, FUNCTION などで簡略文法が使えるようになる
-#setopt sun_keyboard_hack     # SUNキーボードでの頻出 typo ` をカバーする
-setopt always_last_prompt    # カーソル位置は保持したままファイル名一覧を順次その場で表示
-setopt cdable_vars sh_word_split
+# 文字化け対策
+export G_FILENAME_ENCODING=@locale  # ファイル名のエンコーディングを設定
 
-setopt rm_star_wait          # rm * を実行する前に確認
-#setopt rm_star_silent        # rm * を実行する前に確認しない
-#setopt no_clobber            # リダイレクトで上書きを禁止
-unsetopt no_clobber
-
-#setopt no_unset              # 未定義変数の使用禁止
-
-#setopt interactive_comments  # コマンド入力中のコメントを認める
-#setopt chase_links           # シンボリックリンクはリンク先のパスに変換してから実行
-#setopt print_exit_value      # 戻り値が 0 以外の場合終了コードを表示
-#setopt single_line_zle       # デフォルトの複数行コマンドライン編集ではなく、１行編集モードになる
-#setopt xtrace                # コマンドラインがどのように展開され実行されたかを表示する
-
-# less の動作（man less 参照）
-LESS=eFRX
+# less（ページャー）の設定
+LESS=eFRX          # lessの動作オプション
 export LESS
 if type /usr/bin/lesspipe &>/dev/null
 then
-LESSOPEN="| /usr/bin/lesspipe '%s'"
-LESSCLOSE="/usr/bin/lesspipe '%s' '%s'"
-export LESSOPEN LESSCLOSE
+    LESSOPEN="| /usr/bin/lesspipe '%s'"    # ファイルタイプに応じた表示
+    LESSCLOSE="/usr/bin/lesspipe '%s' '%s'" # クリーンアップ処理
+    export LESSOPEN LESSCLOSE
 fi
 
-umask 022 # ファイルを作るとき、どんな属性で作るか（man umask 参照）
-ulimit -s unlimited  # stack size 制限解除
-limit coredumpsize 0 # core 抑制
-# Grip などGlibアプリケーション出力での文字化け防止
-export G_FILENAME_ENCODING=@locale
+# Warp Terminal対策
+if [[ "$TERM_PROGRAM" == "WarpTerminal" ]]; then
+    unset preexec    # コマンド実行前フックを無効化
+fi
 
-# タイトルバーの動的変更
-precmd() {
-[[ -t 1 ]] || return
-case $TERM in
-sun-cmd) print -Pn "\e]l[%~]\e\\"
- ;;
-*xterm*|rxvt|(dt|k|E)term) print -Pn "\e]2;[%~]\a"
- ;;
-esac
-}
+# 開発環境の設定
+if (( $+commands[rbenv] )); then
+    eval "$(rbenv init - zsh)"  # Ruby環境管理ツールの初期化
+fi
 
+# 追加設定ファイルの読み込み
+[[ -f ~/.dots/.zsh/aliases.zsh ]] && source ~/.dots/.zsh/aliases.zsh     # エイリアス設定
+[[ -f ~/.dots/.zsh/functions.zsh ]] && source ~/.dots/.zsh/functions.zsh # 関数定義
+[[ -f ~/.dots/.zsh/starship.zsh ]] && source ~/.dots/.zsh/starship.zsh   # プロンプト設定
 
-# Acroread の Completion が遅い問題を回避
-_acroread_version='7.0.9'
-alias close='screen -D'
-cd ~
-export LANG=en_US.UTF-8
-preexec () {
-        echo -ne "\ek${1%% *}\e\\"
-}
+# シンタックスハイライト
+[[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-[[ -f ~/.dots/.zsh/aliases.zsh ]] && source ~/.dots/.zsh/aliases.zsh
-[[ -f ~/.dots/.zsh/functions.zsh ]] && source ~/.dots/.zsh/functions.zsh
-[[ -f ~/.dots/.zsh/starship.zsh ]] && source ~/.dots/.zsh/starship.zsh
-
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
-
-# rbenv
-eval "$(rbenv init - zsh)"
-
-# starship
-eval "$(starship init zsh)"
-
+# Starshipプロンプトの設定
+if (( $+commands[starship] )); then
+    eval "$(starship init zsh)"  # モダンなプロンプトを初期化
+fi
 

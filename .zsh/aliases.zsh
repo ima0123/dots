@@ -74,3 +74,22 @@ fi
 
 
 alias bu='brew update; brew upgrade; brew upgrade --cask --greedy; brew cleanup'
+
+
+alias webstorm='open -na "WebStorm.app" --args "$@"'
+alias phpstorm='open -na "PHPStorm.app" --args "$@"'
+
+
+alias k='kubectl'
+alias kg='kubectl get'
+alias kgn='kubectl get nodes'
+alias kgs='kubectl get services'
+
+alias kd='kubectl describe'
+alias kl='kubectl logs'
+alias ka='kubectl apply -f'
+
+# kubectlのオートコンプリート設定
+if [ $commands[kubectl] ]; then
+    source <(kubectl completion zsh)
+fi

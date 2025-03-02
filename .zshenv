@@ -16,3 +16,9 @@ export LDFLAGS="-L/opt/homebrew/opt/imagemagick@6/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/imagemagick@6/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/imagemagick@6/lib/pkgconfig"
 
+# composer
+export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+# Java
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home"
